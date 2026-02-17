@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.genspark.ai/api/files/s/2uHQfxWX -->
+<html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סקר שביעות רצון - שפונדר פדלון</title>
+    <link rel="stylesheet" href="./survey_files/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #C4A668;
+            --dark-blue: #1B4B7F;
+            --medium-blue: #4A6FA5;
+            --gray: #6B6B6B;
+            --light-bg: #F5F5F5;
+            --white: #ffffff;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e8e8e8 100%);
+            color: var(--gray);
+            line-height: 1.6;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header with Logos on Sides */
+        .header {
+            background: var(--white);
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+            padding: 20px 240px;
+        }
+
+        .logo-left {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 200px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-right {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 200px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-text {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .company-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+
+        .survey-subtitle {
+            color: var(--gold);
+            font-size: 1.2em;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 25px;
+            height: 25px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--medium-blue) 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Instructions Box */
+        .instructions-box {
+            background: var(--medium-blue);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            line-height: 1.8;
+        }
+
+        .instructions-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions-list {
+            list-style: none;
+        }
+
+        .instructions-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .instructions-list li::before {
+            content: "✓";
+            color: var(--gold);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Already Completed Message */
+        .already-completed {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .already-completed.active {
+            display: block;
+        }
+
+        .already-completed i {
+            font-size: 4em;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .already-completed h2 {
+            font-size: 2em;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        /* Auto-save indicator */
+        .autosave-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        /* Department Block */
+        .department-block {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-right: 5px solid var(--gold);
+        }
+
+        .department-header {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            font-weight: bold;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Star Rating */
+        .rating-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .criteria-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .criteria-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .criteria-label {
+            font-size: 1.1em;
+            color: var(--gray);
+            flex: 1;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+            direction: ltr;
+        }
+
+        .star {
+            font-size: 1.8em;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 40px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .star:hover,
+        .star.active {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        /* Challenges Section */
+        .challenges-section {
+            margin-bottom: 30px;
+        }
+
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .challenge-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .challenge-item:hover {
+            background: #e8e8e8;
+        }
+
+        .challenge-checkbox {
+            min-width: 20px;
+            min-height: 20px;
+            cursor: pointer;
+        }
+
+        .challenge-label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Frequency Section */
+        .frequency-section {
+            margin-bottom: 30px;
+        }
+
+        .frequency-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .frequency-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .frequency-item:hover {
+            background: #e8e8e8;
+        }
+
+        .frequency-radio {
+            min-width: 20px;
+            min-height: 20px;
+            cursor: pointer;
+        }
+
+        /* NEW EMOJI RATING STYLES */
+        .emoji-section {
+            margin-bottom: 30px;
+        }
+
+        .satisfaction-rating {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .satisfaction-rating h4 {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+        }
+
+        .emoji-container {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .emoji-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .emoji-label input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .emoji-display {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .emoji-icon {
+            font-size: 48px;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .emoji-display.happy {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .emoji-display.good {
+            background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
+        }
+
+        .emoji-display.neutral {
+            background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+        }
+
+        .emoji-display.sad {
+            background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+        }
+
+        .emoji-display.angry {
+            background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+        }
+
+        .emoji-label input:checked + .emoji-display {
+            border-color: var(--gold);
+            transform: scale(1.15);
+            box-shadow: 0 6px 12px rgba(196, 166, 104, 0.4);
+        }
+
+        .emoji-label:hover .emoji-display {
+            transform: scale(1.08);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .emoji-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Text Area */
+        .textarea-section {
+            margin-bottom: 30px;
+        }
+
+        .textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        /* Final Section */
+        .final-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .final-header {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold) 0%, #b89555 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(196, 166, 104, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(196, 166, 104, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .success-screen.active {
+            display: block;
+        }
+
+        .checkmark {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--success);
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkmark i {
+            color: white;
+            font-size: 3em;
+        }
+
+        .success-title {
+            font-size: 2.5em;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 1.3em;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: var(--danger);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-message.active {
+            display: flex;
+        }
+
+        /* Warning Message */
+        .warning-message {
+            background: #f39c12;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-message.active {
+            display: flex;
+        }
+
+        /* Privacy Note */
+        .privacy-note {
+            text-align: center;
+            color: var(--gray);
+            margin-top: 20px;
+            font-size: 0.9em;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .header-content {
+                padding: 20px 180px;
+            }
+            
+            .logo-left,
+            .logo-right {
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 20px 140px;
+                min-height: 160px;
+            }
+
+            .logo-left,
+            .logo-right {
+                height: 130px;
+            }
+
+            .company-name {
+                font-size: 1.5em;
+            }
+
+            .survey-subtitle {
+                font-size: 1em;
+            }
+
+            .department-header {
+                font-size: 1.4em;
+            }
+
+            .star {
+                font-size: 1.5em;
+                min-width: 35px;
+                min-height: 35px;
+            }
+
+            .emoji-display {
+                width: 65px;
+                height: 65px;
+            }
+
+            .emoji-icon {
+                font-size: 38px;
+            }
+
+            .emoji-container {
+                gap: 18px;
+            }
+
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 20px 110px;
+                min-height: 130px;
+            }
+
+            .logo-left,
+            .logo-right {
+                height: 100px;
+            }
+
+            .company-name {
+                font-size: 1.2em;
+            }
+
+            .emoji-display {
+                width: 60px;
+                height: 60px;
+            }
+
+            .emoji-icon {
+                font-size: 35px;
+            }
+        }
+    </style>
+<style>
+    .genspark-notice-dialog {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 10001;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .genspark-notice-content {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      box-sizing: border-box;
+      padding: 10px 30px 30px 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+
+    .genspark-notice-title {
+      color: #000;
+      font-family: Arial;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 150%; 
+    }
+
+    .genspark-notice-list {
+      margin: 24px 0;
+      
+      color: #606366;
+      font-family: Arial;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+      padding-left: 12px;
+    }
+
+    .genspark-notice-list li {
+      margin-bottom: 12px;
+      list-style-type: disc;
+    }
+
+    .genspark-notice-list li a {
+      color: #606366;
+      text-decoration: underline;
+    }
+
+    .genspark-notice-checkbox {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      gap: 10px;
+
+      color: #232425;
+
+      font-family: Arial;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .genspark-notice-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+      
+    .genspark-notice-ok {
+      color: #232425;
+
+      text-align: center;
+      font-family: Arial;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 150%; 
+
+      cursor: pointer;
+      display: flex;
+      height: 40px;
+      padding: 6px 14px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      border-radius: 8px;
+      border: 1px solid #000;
+      box-sizing: border-box;
+      width: 100%;
+    }
+  </style></head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header" id="header">
+            <div class="header-content">
+                <!-- 
+                    FOR GITHUB PAGES: 
+                    Download the logo images and upload them to your GitHub repository in an 'images' folder,
+                    then replace the src attributes below with relative paths like:
+                    src="./images/sf-logo.png" and src="./images/padlon-logo.png"
+                -->
+                <img src="./survey_files/sf-logo.png" alt="SF Logo" class="logo-left" onerror="this.style.display=&#39;none&#39;" style="display: none;">
+                <div class="header-text">
+                    <div class="company-name">שפונדר פדלון</div>
+                    <div class="survey-subtitle">סקר שביעות רצון ממחלקות המטה</div>
+                </div>
+                <img src="./survey_files/padlon-logo.png" alt="Padlon Logo" class="logo-right" onerror="this.style.display=&#39;none&#39;" style="display: none;">
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+        </div>
+
+        <!-- Instructions Box -->
+        <div class="instructions-box">
+            <div class="instructions-title">
+                <i class="fas fa-info-circle"></i>
+                הוראות מילוי
+            </div>
+            <ul class="instructions-list">
+                <li>סף דירוג: 1 - לא מרוצה כלל, 5 = מרוצה מאוד</li>
+                <li>זמן ממוצע: 3-5 דקות</li>
+                <li>דירוג מינימלי: מומלץ לדרג לפחות 3 מתוך 5 קריטריונים בכל מחלקה</li>
+                <li>סקר אנונימי: התשובות אינן מזוהות אישית</li>
+                <li>שמירה אוטומטית: התשובות נשמרות אוטומטית כל 30 שניות</li>
+                <li>לחיצה שנייה על אותו כוכב מסירה את הדירוג</li>
+            </ul>
+        </div>
+
+        <!-- Already Completed Message -->
+        <div class="already-completed" id="alreadyCompleted">
+            <i class="fas fa-check-circle"></i>
+            <h2>כבר מילאת את הסקר</h2>
+            <p style="font-size: 1.2em; color: var(--gray);">תודה רבה! התשובות שלך נשמרו בהצלחה.</p>
+        </div>
+
+        <!-- Auto-save Indicator -->
+        <div class="autosave-indicator" id="autosaveIndicator">
+            <i class="fas fa-check-circle"></i>
+            <span>נשמר אוטומטית</span>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- Warning Message -->
+        <div class="warning-message" id="warningMessage">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="warningText"></span>
+        </div>
+
+        <!-- Survey Form -->
+        <form id="surveyForm">
+            <!-- HR Department -->
+            <div class="department-block">
+                <div class="department-header">
+                    <i class="fas fa-users"></i>
+                    משאבי אנוש (HR)
+                </div>
+
+                <!-- Rating -->
+                <div class="rating-section">
+                    <div class="section-title">
+                        <i class="fas fa-star"></i>
+                        דירוג המחלקה
+                    </div>
+                    <div class="criteria-grid">
+                        <div class="criteria-item">
+                            <span class="criteria-label">מהירות מענה</span>
+                            <div class="star-rating" data-dept="hr" data-criteria="speed">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">איכות שירות</span>
+                            <div class="star-rating" data-dept="hr" data-criteria="quality">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">מקצועיות</span>
+                            <div class="star-rating" data-dept="hr" data-criteria="professionalism">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">נגישות וזמינות</span>
+                            <div class="star-rating" data-dept="hr" data-criteria="accessibility">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">תקשורת ברורה</span>
+                            <div class="star-rating" data-dept="hr" data-criteria="communication">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Challenges -->
+                <div class="challenges-section">
+                    <div class="section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        אתגרים בשירות
+                    </div>
+                    <div class="challenges-grid">
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="hr" value="זמן המתנה ארוך לתשובות">
+                            <span class="challenge-label">זמן המתנה ארוך לתשובות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="hr" value="תהליכי גיוס ארוכים">
+                            <span class="challenge-label">תהליכי גיוס ארוכים</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="hr" value="חוסר תקשורת על סטטוס בקשות">
+                            <span class="challenge-label">חוסר תקשורת על סטטוס בקשות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="hr" value="בירוקרטיה מיותרת">
+                            <span class="challenge-label">בירוקרטיה מיותרת</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="hr" value="חוסר זמינות לשיחות">
+                            <span class="challenge-label">חוסר זמינות לשיחות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="hr" value="חוסר בהירות בהנחיות">
+                            <span class="challenge-label">חוסר בהירות בהנחיות</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Frequency -->
+                <div class="frequency-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        תדירות השימוש במחלקה
+                    </div>
+                    <div class="frequency-options">
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-hr" value="daily">
+                            <span>יומי - כמעט בכל יום</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-hr" value="weekly">
+                            <span>שבועי - מספר פעמים בשבוע</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-hr" value="monthly">
+                            <span>חודשי - מספר פעמים בחודש</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-hr" value="rarely">
+                            <span>נדיר - לעיתים רחוקות</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Emoji Satisfaction -->
+                <div class="emoji-section">
+                    <div class="satisfaction-rating">
+                        <h4>שביעות רצון כללית מהמחלקה</h4>
+                        <div class="emoji-container">
+                            <label class="emoji-label">
+                                <input type="radio" name="hr_satisfaction" value="5">
+                                <div class="emoji-display happy">
+                                    <span class="emoji-icon">😊</span>
+                                </div>
+                                <span class="emoji-text">מרוצה מאוד</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="hr_satisfaction" value="4">
+                                <div class="emoji-display good">
+                                    <span class="emoji-icon">🙂</span>
+                                </div>
+                                <span class="emoji-text">מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="hr_satisfaction" value="3">
+                                <div class="emoji-display neutral">
+                                    <span class="emoji-icon">😐</span>
+                                </div>
+                                <span class="emoji-text">ניטרלי</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="hr_satisfaction" value="2">
+                                <div class="emoji-display sad">
+                                    <span class="emoji-icon">☹️</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="hr_satisfaction" value="1">
+                                <div class="emoji-display angry">
+                                    <span class="emoji-icon">😞</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה כלל</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Improvement Text -->
+                <div class="textarea-section">
+                    <div class="section-title">
+                        <i class="fas fa-comment"></i>
+                        הצעות לשיפור השירות
+                    </div>
+                    <textarea class="textarea" data-dept="hr" placeholder="איך אפשר לשפר את השירות של מחלקת משאבי אנוש?"></textarea>
+                </div>
+            </div>
+
+            <!-- Procurement Department -->
+            <div class="department-block">
+                <div class="department-header">
+                    <i class="fas fa-shopping-cart"></i>
+                    רכש (Procurement)
+                </div>
+
+                <!-- Rating -->
+                <div class="rating-section">
+                    <div class="section-title">
+                        <i class="fas fa-star"></i>
+                        דירוג המחלקה
+                    </div>
+                    <div class="criteria-grid">
+                        <div class="criteria-item">
+                            <span class="criteria-label">מהירות מענה</span>
+                            <div class="star-rating" data-dept="procurement" data-criteria="speed">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">איכות שירות</span>
+                            <div class="star-rating" data-dept="procurement" data-criteria="quality">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">מקצועיות</span>
+                            <div class="star-rating" data-dept="procurement" data-criteria="professionalism">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">נגישות וזמינות</span>
+                            <div class="star-rating" data-dept="procurement" data-criteria="accessibility">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">תקשורת ברורה</span>
+                            <div class="star-rating" data-dept="procurement" data-criteria="communication">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Challenges -->
+                <div class="challenges-section">
+                    <div class="section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        אתגרים בשירות
+                    </div>
+                    <div class="challenges-grid">
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="procurement" value="זמן הזמנה ארוך">
+                            <span class="challenge-label">זמן הזמנה ארוך</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="procurement" value="איכות פריטים לא עומדת בציפיות">
+                            <span class="challenge-label">איכות פריטים לא עומדת בציפיות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="procurement" value="מחירים לא תחרותיים">
+                            <span class="challenge-label">מחירים לא תחרותיים</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="procurement" value="חוסר עדכון על סטטוס הזמנות">
+                            <span class="challenge-label">חוסר עדכון על סטטוס הזמנות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="procurement" value="תהליכי אישור מסורבלים">
+                            <span class="challenge-label">תהליכי אישור מסורבלים</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="procurement" value="בעיות עם ספקים">
+                            <span class="challenge-label">בעיות עם ספקים</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Frequency -->
+                <div class="frequency-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        תדירות השימוש במחלקה
+                    </div>
+                    <div class="frequency-options">
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-procurement" value="daily">
+                            <span>יומי - כמעט בכל יום</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-procurement" value="weekly">
+                            <span>שבועי - מספר פעמים בשבוע</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-procurement" value="monthly">
+                            <span>חודשי - מספר פעמים בחודש</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-procurement" value="rarely">
+                            <span>נדיר - לעיתים רחוקות</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Emoji Satisfaction -->
+                <div class="emoji-section">
+                    <div class="satisfaction-rating">
+                        <h4>שביעות רצון כללית מהמחלקה</h4>
+                        <div class="emoji-container">
+                            <label class="emoji-label">
+                                <input type="radio" name="procurement_satisfaction" value="5">
+                                <div class="emoji-display happy">
+                                    <span class="emoji-icon">😊</span>
+                                </div>
+                                <span class="emoji-text">מרוצה מאוד</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="procurement_satisfaction" value="4">
+                                <div class="emoji-display good">
+                                    <span class="emoji-icon">🙂</span>
+                                </div>
+                                <span class="emoji-text">מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="procurement_satisfaction" value="3">
+                                <div class="emoji-display neutral">
+                                    <span class="emoji-icon">😐</span>
+                                </div>
+                                <span class="emoji-text">ניטרלי</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="procurement_satisfaction" value="2">
+                                <div class="emoji-display sad">
+                                    <span class="emoji-icon">☹️</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="procurement_satisfaction" value="1">
+                                <div class="emoji-display angry">
+                                    <span class="emoji-icon">😞</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה כלל</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Improvement Text -->
+                <div class="textarea-section">
+                    <div class="section-title">
+                        <i class="fas fa-comment"></i>
+                        הצעות לשיפור השירות
+                    </div>
+                    <textarea class="textarea" data-dept="procurement" placeholder="איך אפשר לשפר את השירות של מחלקת רכש?"></textarea>
+                </div>
+            </div>
+
+            <!-- Logistics Department -->
+            <div class="department-block">
+                <div class="department-header">
+                    <i class="fas fa-truck"></i>
+                    לוגיסטיקה (Logistics)
+                </div>
+
+                <!-- Rating -->
+                <div class="rating-section">
+                    <div class="section-title">
+                        <i class="fas fa-star"></i>
+                        דירוג המחלקה
+                    </div>
+                    <div class="criteria-grid">
+                        <div class="criteria-item">
+                            <span class="criteria-label">מהירות מענה</span>
+                            <div class="star-rating" data-dept="logistics" data-criteria="speed">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">איכות שירות</span>
+                            <div class="star-rating" data-dept="logistics" data-criteria="quality">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">מקצועיות</span>
+                            <div class="star-rating" data-dept="logistics" data-criteria="professionalism">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">נגישות וזמינות</span>
+                            <div class="star-rating" data-dept="logistics" data-criteria="accessibility">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">תקשורת ברורה</span>
+                            <div class="star-rating" data-dept="logistics" data-criteria="communication">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Challenges -->
+                <div class="challenges-section">
+                    <div class="section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        אתגרים בשירות
+                    </div>
+                    <div class="challenges-grid">
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="logistics" value="עיכובים באספקה">
+                            <span class="challenge-label">עיכובים באספקה</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="logistics" value="בעיות תיאום משלוחים">
+                            <span class="challenge-label">בעיות תיאום משלוחים</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="logistics" value="איכות חומרים לא טובה">
+                            <span class="challenge-label">איכות חומרים לא טובה</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="logistics" value="חוסר מלאי">
+                            <span class="challenge-label">חוסר מלאי</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="logistics" value="בעיות באחסון">
+                            <span class="challenge-label">בעיות באחסון</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="logistics" value="חוסר תקשורת עם הספקים">
+                            <span class="challenge-label">חוסר תקשורת עם הספקים</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Frequency -->
+                <div class="frequency-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        תדירות השימוש במחלקה
+                    </div>
+                    <div class="frequency-options">
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-logistics" value="daily">
+                            <span>יומי - כמעט בכל יום</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-logistics" value="weekly">
+                            <span>שבועי - מספר פעמים בשבוע</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-logistics" value="monthly">
+                            <span>חודשי - מספר פעמים בחודש</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-logistics" value="rarely">
+                            <span>נדיר - לעיתים רחוקות</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Emoji Satisfaction -->
+                <div class="emoji-section">
+                    <div class="satisfaction-rating">
+                        <h4>שביעות רצון כללית מהמחלקה</h4>
+                        <div class="emoji-container">
+                            <label class="emoji-label">
+                                <input type="radio" name="logistics_satisfaction" value="5">
+                                <div class="emoji-display happy">
+                                    <span class="emoji-icon">😊</span>
+                                </div>
+                                <span class="emoji-text">מרוצה מאוד</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="logistics_satisfaction" value="4">
+                                <div class="emoji-display good">
+                                    <span class="emoji-icon">🙂</span>
+                                </div>
+                                <span class="emoji-text">מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="logistics_satisfaction" value="3">
+                                <div class="emoji-display neutral">
+                                    <span class="emoji-icon">😐</span>
+                                </div>
+                                <span class="emoji-text">ניטרלי</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="logistics_satisfaction" value="2">
+                                <div class="emoji-display sad">
+                                    <span class="emoji-icon">☹️</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="logistics_satisfaction" value="1">
+                                <div class="emoji-display angry">
+                                    <span class="emoji-icon">😞</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה כלל</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Improvement Text -->
+                <div class="textarea-section">
+                    <div class="section-title">
+                        <i class="fas fa-comment"></i>
+                        הצעות לשיפור השירות
+                    </div>
+                    <textarea class="textarea" data-dept="logistics" placeholder="איך אפשר לשפר את השירות של מחלקת לוגיסטיקה?"></textarea>
+                </div>
+            </div>
+
+            <!-- IT Department -->
+            <div class="department-block">
+                <div class="department-header">
+                    <i class="fas fa-laptop"></i>
+                    מערכות מידע (IT)
+                </div>
+
+                <!-- Rating -->
+                <div class="rating-section">
+                    <div class="section-title">
+                        <i class="fas fa-star"></i>
+                        דירוג המחלקה
+                    </div>
+                    <div class="criteria-grid">
+                        <div class="criteria-item">
+                            <span class="criteria-label">מהירות מענה</span>
+                            <div class="star-rating" data-dept="it" data-criteria="speed">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">איכות שירות</span>
+                            <div class="star-rating" data-dept="it" data-criteria="quality">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">מקצועיות</span>
+                            <div class="star-rating" data-dept="it" data-criteria="professionalism">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">נגישות וזמינות</span>
+                            <div class="star-rating" data-dept="it" data-criteria="accessibility">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <span class="criteria-label">תקשורת ברורה</span>
+                            <div class="star-rating" data-dept="it" data-criteria="communication">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Challenges -->
+                <div class="challenges-section">
+                    <div class="section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        אתגרים בשירות
+                    </div>
+                    <div class="challenges-grid">
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="it" value="זמן תגובה ארוך לתקלות">
+                            <span class="challenge-label">זמן תגובה ארוך לתקלות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="it" value="חוסר יציבות במערכות">
+                            <span class="challenge-label">חוסר יציבות במערכות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="it" value="חוסר הדרכה על מערכות חדשות">
+                            <span class="challenge-label">חוסר הדרכה על מערכות חדשות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="it" value="תמיכה לא מספקת">
+                            <span class="challenge-label">תמיכה לא מספקת</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="it" value="גישה מוגבלת למערכות">
+                            <span class="challenge-label">גישה מוגבלת למערכות</span>
+                        </label>
+                        <label class="challenge-item">
+                            <input type="checkbox" class="challenge-checkbox" data-dept="it" value="בעיות עם ציוד">
+                            <span class="challenge-label">בעיות עם ציוד</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Frequency -->
+                <div class="frequency-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        תדירות השימוש במחלקה
+                    </div>
+                    <div class="frequency-options">
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-it" value="daily">
+                            <span>יומי - כמעט בכל יום</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-it" value="weekly">
+                            <span>שבועי - מספר פעמים בשבוע</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-it" value="monthly">
+                            <span>חודשי - מספר פעמים בחודש</span>
+                        </label>
+                        <label class="frequency-item">
+                            <input type="radio" class="frequency-radio" name="freq-it" value="rarely">
+                            <span>נדיר - לעיתים רחוקות</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Emoji Satisfaction -->
+                <div class="emoji-section">
+                    <div class="satisfaction-rating">
+                        <h4>שביעות רצון כללית מהמחלקה</h4>
+                        <div class="emoji-container">
+                            <label class="emoji-label">
+                                <input type="radio" name="it_satisfaction" value="5">
+                                <div class="emoji-display happy">
+                                    <span class="emoji-icon">😊</span>
+                                </div>
+                                <span class="emoji-text">מרוצה מאוד</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="it_satisfaction" value="4">
+                                <div class="emoji-display good">
+                                    <span class="emoji-icon">🙂</span>
+                                </div>
+                                <span class="emoji-text">מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="it_satisfaction" value="3">
+                                <div class="emoji-display neutral">
+                                    <span class="emoji-icon">😐</span>
+                                </div>
+                                <span class="emoji-text">ניטרלי</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="it_satisfaction" value="2">
+                                <div class="emoji-display sad">
+                                    <span class="emoji-icon">☹️</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="it_satisfaction" value="1">
+                                <div class="emoji-display angry">
+                                    <span class="emoji-icon">😞</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה כלל</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Improvement Text -->
+                <div class="textarea-section">
+                    <div class="section-title">
+                        <i class="fas fa-comment"></i>
+                        הצעות לשיפור השירות
+                    </div>
+                    <textarea class="textarea" data-dept="it" placeholder="איך אפשר לשפר את השירות של מחלקת IT?"></textarea>
+                </div>
+            </div>
+
+            <!-- Final Section -->
+            <div class="final-section">
+                <div class="final-header">
+                    <i class="fas fa-chart-bar"></i>
+                    סיכום כללי
+                </div>
+
+                <!-- Overall Satisfaction -->
+                <div class="emoji-section">
+                    <div class="satisfaction-rating">
+                        <h4>שביעות רצון כללית מכלל השירותים</h4>
+                        <div class="emoji-container">
+                            <label class="emoji-label">
+                                <input type="radio" name="overall_satisfaction" value="5">
+                                <div class="emoji-display happy">
+                                    <span class="emoji-icon">😊</span>
+                                </div>
+                                <span class="emoji-text">מרוצה מאוד</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="overall_satisfaction" value="4">
+                                <div class="emoji-display good">
+                                    <span class="emoji-icon">🙂</span>
+                                </div>
+                                <span class="emoji-text">מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="overall_satisfaction" value="3">
+                                <div class="emoji-display neutral">
+                                    <span class="emoji-icon">😐</span>
+                                </div>
+                                <span class="emoji-text">ניטרלי</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="overall_satisfaction" value="2">
+                                <div class="emoji-display sad">
+                                    <span class="emoji-icon">☹️</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה</span>
+                            </label>
+                            <label class="emoji-label">
+                                <input type="radio" name="overall_satisfaction" value="1">
+                                <div class="emoji-display angry">
+                                    <span class="emoji-icon">😞</span>
+                                </div>
+                                <span class="emoji-text">לא מרוצה כלל</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- General Suggestions -->
+                <div class="textarea-section">
+                    <div class="section-title">
+                        <i class="fas fa-comments"></i>
+                        הצעות והערות כלליות
+                    </div>
+                    <textarea class="textarea" id="generalSuggestions" placeholder="שתף/י את ההצעות והערות הכלליות שלך..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        שלח סקר
+                    </button>
+                </div>
+
+                <div class="privacy-note">
+                    <i class="fas fa-lock"></i>
+                    הסקר אנונימי לחלוטין | תמיכה טכנית: dani@sf-group.co.il
+                </div>
+            </div>
+        </form>
+
+        <!-- Success Screen -->
+        <div class="success-screen" id="successScreen">
+            <div class="checkmark">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="success-title">תודה רבה!</div>
+            <div class="success-message">התשובות שלך נשמרו בהצלחה</div>
+            <div class="success-message">המשוב שלך יעזור לנו להשתפר</div>
+        </div>
+    </div>
+
+    <script>
+        // Survey Data
+        let surveyData = {
+            ratings: { hr: {}, procurement: {}, logistics: {}, it: {} },
+            challenges: { hr: [], procurement: [], logistics: [], it: [] },
+            frequency: { hr: '', procurement: '', logistics: '', it: '' },
+            satisfaction: { hr: 0, procurement: 0, logistics: 0, it: 0 },
+            improvements: { hr: '', procurement: '', logistics: '', it: '' },
+            overallSatisfaction: 0,
+            generalSuggestions: ''
+        };
+
+        // Check if already completed
+        document.addEventListener('DOMContentLoaded', function() {
+            if (getCookie('survey_completed')) {
+                document.getElementById('surveyForm').style.display = 'none';
+                document.getElementById('alreadyCompleted').classList.add('active');
+                return;
+            }
+
+            initStarRatings();
+            initEmojis();
+            initCheckboxes();
+            initTextareas();
+            initAutoSave();
+            loadDraft();
+        });
+
+        // Cookie functions
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + ";expires=" + d.toUTCString() + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Star Ratings with Click-to-Remove functionality
+        function initStarRatings() {
+            document.querySelectorAll('.star-rating').forEach(rating => {
+                const dept = rating.dataset.dept;
+                const criteria = rating.dataset.criteria;
+                const stars = rating.querySelectorAll('.star');
+
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const value = parseInt(this.dataset.value);
+                        const currentValue = surveyData.ratings[dept][criteria];
+                        
+                        if (currentValue === value) {
+                            delete surveyData.ratings[dept][criteria];
+                            stars.forEach(s => s.classList.remove('active'));
+                        } else {
+                            surveyData.ratings[dept][criteria] = value;
+                            stars.forEach(s => {
+                                if (parseInt(s.dataset.value) <= value) {
+                                    s.classList.add('active');
+                                } else {
+                                    s.classList.remove('active');
+                                }
+                            });
+                        }
+
+                        updateProgress();
+                        saveDraft();
+                    });
+                });
+            });
+        }
+
+        // Emojis - NEW IMPLEMENTATION
+        function initEmojis() {
+            document.querySelectorAll('input[type="radio"][name$="_satisfaction"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const name = this.name;
+                    const value = parseInt(this.value);
+                    
+                    if (name === 'overall_satisfaction') {
+                        surveyData.overallSatisfaction = value;
+                    } else {
+                        const dept = name.replace('_satisfaction', '');
+                        surveyData.satisfaction[dept] = value;
+                    }
+                    
+                    updateProgress();
+                    saveDraft();
+                });
+            });
+        }
+
+        // Checkboxes
+        function initCheckboxes() {
+            document.querySelectorAll('.challenge-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const dept = this.dataset.dept;
+                    surveyData.challenges[dept] = [];
+                    
+                    document.querySelectorAll(`.challenge-checkbox[data-dept="${dept}"]:checked`).forEach(cb => {
+                        surveyData.challenges[dept].push(cb.value);
+                    });
+                    
+                    updateProgress();
+                    saveDraft();
+                });
+            });
+
+            document.querySelectorAll('.frequency-radio').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const dept = this.name.replace('freq-', '');
+                    surveyData.frequency[dept] = this.value;
+                    updateProgress();
+                    saveDraft();
+                });
+            });
+        }
+
+        // Textareas
+        function initTextareas() {
+            document.querySelectorAll('.textarea').forEach(textarea => {
+                textarea.addEventListener('input', function() {
+                    const dept = this.dataset.dept;
+                    if (dept) {
+                        surveyData.improvements[dept] = this.value;
+                    } else if (this.id === 'generalSuggestions') {
+                        surveyData.generalSuggestions = this.value;
+                    }
+                    saveDraft();
+                });
+            });
+        }
+
+        // Progress
+        function updateProgress() {
+            let total = 0;
+            let filled = 0;
+
+            total += 20;
+            Object.values(surveyData.ratings).forEach(dept => {
+                filled += Object.keys(dept).length;
+            });
+
+            total += 5;
+            Object.values(surveyData.satisfaction).forEach(val => {
+                if (val > 0) filled++;
+            });
+            if (surveyData.overallSatisfaction > 0) filled++;
+
+            total += 4;
+            Object.values(surveyData.frequency).forEach(val => {
+                if (val) filled++;
+            });
+
+            const progress = Math.round((filled / total) * 100);
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = progress + '%';
+        }
+
+        // Auto-save
+        function initAutoSave() {
+            setInterval(saveDraft, 30000);
+        }
+
+        function saveDraft() {
+            localStorage.setItem('surveyDraft', JSON.stringify(surveyData));
+            showAutoSave();
+        }
+
+        function showAutoSave() {
+            const indicator = document.getElementById('autosaveIndicator');
+            indicator.style.display = 'flex';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+
+        function loadDraft() {
+            const draft = localStorage.getItem('surveyDraft');
+            if (draft) {
+                surveyData = JSON.parse(draft);
+                restoreData();
+            }
+        }
+
+        function restoreData() {
+            Object.entries(surveyData.ratings).forEach(([dept, ratings]) => {
+                Object.entries(ratings).forEach(([criteria, value]) => {
+                    const rating = document.querySelector(`.star-rating[data-dept="${dept}"][data-criteria="${criteria}"]`);
+                    if (rating) {
+                        rating.querySelectorAll('.star').forEach(star => {
+                            if (parseInt(star.dataset.value) <= value) {
+                                star.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            });
+
+            Object.entries(surveyData.satisfaction).forEach(([dept, value]) => {
+                if (value > 0) {
+                    const radio = document.querySelector(`input[name="${dept}_satisfaction"][value="${value}"]`);
+                    if (radio) radio.checked = true;
+                }
+            });
+
+            if (surveyData.overallSatisfaction > 0) {
+                const radio = document.querySelector(`input[name="overall_satisfaction"][value="${surveyData.overallSatisfaction}"]`);
+                if (radio) radio.checked = true;
+            }
+
+            Object.entries(surveyData.frequency).forEach(([dept, value]) => {
+                const radio = document.querySelector(`input[name="freq-${dept}"][value="${value}"]`);
+                if (radio) radio.checked = true;
+            });
+
+            Object.entries(surveyData.improvements).forEach(([dept, text]) => {
+                const textarea = document.querySelector(`.textarea[data-dept="${dept}"]`);
+                if (textarea) textarea.value = text;
+            });
+
+            if (surveyData.generalSuggestions) {
+                document.getElementById('generalSuggestions').value = surveyData.generalSuggestions;
+            }
+
+            updateProgress();
+        }
+
+        // Validation
+        function validateForm() {
+            const warnings = [];
+            const errors = [];
+
+            const deptNames = { hr: 'משאבי אנוש', procurement: 'רכש', logistics: 'לוגיסטיקה', it: 'IT' };
+            Object.entries(surveyData.ratings).forEach(([dept, ratings]) => {
+                if (Object.keys(ratings).length < 3) {
+                    warnings.push(`מומלץ לדרג לפחות 3 קריטריונים במחלקת ${deptNames[dept]}`);
+                }
+            });
+
+            Object.entries(surveyData.satisfaction).forEach(([dept, value]) => {
+                if (value === 0) {
+                    errors.push(`יש לבחור שביעות רצון עבור מחלקת ${deptNames[dept]}`);
+                }
+            });
+
+            Object.entries(surveyData.frequency).forEach(([dept, value]) => {
+                if (!value) {
+                    errors.push(`יש לבחור תדירות שימוש עבור מחלקת ${deptNames[dept]}`);
+                }
+            });
+
+            if (surveyData.overallSatisfaction === 0) {
+                errors.push('יש לבחור שביעות רצון כללית');
+            }
+
+            return { errors, warnings };
+        }
+
+        // Submit
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const validation = validateForm();
+            
+            if (validation.errors.length > 0) {
+                document.getElementById('errorText').textContent = validation.errors.join(' | ');
+                document.getElementById('errorMessage').classList.add('active');
+                document.getElementById('warningMessage').classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            if (validation.warnings.length > 0) {
+                document.getElementById('warningText').textContent = validation.warnings.join(' | ');
+                document.getElementById('warningMessage').classList.add('active');
+                document.getElementById('errorMessage').classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            const responses = JSON.parse(localStorage.getItem('surveyResponses') || '[]');
+            responses.push({
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                data: surveyData
+            });
+            localStorage.setItem('surveyResponses', JSON.stringify(responses));
+
+            setCookie('survey_completed', 'true', 365);
+            localStorage.setItem('survey_completed_time', Date.now());
+
+            localStorage.removeItem('surveyDraft');
+
+            document.getElementById('surveyForm').style.display = 'none';
+            document.getElementById('successScreen').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+<script defer="" src="./survey_files/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;rayId&quot;:&quot;9cf493808c703d7c&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfEdge&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}},&quot;version&quot;:&quot;2025.9.1&quot;,&quot;token&quot;:&quot;4edd5f8ec12a48cfa682ab8261b80a79&quot;}" crossorigin="anonymous"></script>
+
+
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDrRBfoukgziJkfxGPsquyjyVX7ZhWYP4LwteDwsHpa%2BprLlplA%2FtRx%2BE1KYHNjqeZOFHd1aND9HoXTX9%2FVWyzFg8Ky28siSYNBihF1pPcnCoMV1T5M6VeXIjbQpOGqa7gprqeir8%2BBgmc8%2FY%2BDJUgI6V2HvG9IZUoeSF6RmYtP94gt13YLz3OT37zxf5F1NhbO90t9ylMTO5KqPDsH5wmhZCbLQ4k9%2FAXzQy8rKD0%2F5wrNS8qEqd%2FjWBXjoe4aEPYsx4p8rIP0sR1zFlHgGacPdPhOdO4F7kSKe9qacpPbMMuY8L1Gqrwz4qkAArbC9b7N0FMxuhZPoLS1k8MVfDtIlYMYARoHeZYWQ2%2BJkZDTIk7Z%2BNqXHFCoVfMT0K3Hso%2FMcY36Pr60H6uTV%2BjTZZg%2FrgM6xSjoNjv15QtoGCGOeT7XkErxX8mEYLCmuAHRb5iVvQbXv8wgxy9V2hiRlO4NdlkjHnAmoMOhAcbWKp%2ByMCoUQjLXBgwcpw%2FdeB1hy%2F8TVy7GVYbW7RYNxml%2F%2BpqP7Ng06ZcvnoZ73qX1CPN5adnGd3igp%2BhrX6S7tVa7ir3GqBMFLVl1tF%2BS1UbnBCj0g%3D";
+        window.__genspark_locale = "he-IL";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDrRBfoukgziJkfxGPsquyjyVX7ZhWYP4LwteDwsHpa+prLlplA/tRx+E1KYHNjqeZOFHd1aND9HoXTX9/VWyzFg8Ky28siSYNBihF1pPcnCoMV1T5M6VeXIjbQpOGqa7gprqeir8+Bgmc8/Y+DJUgI6V2HvG9IZUoeSF6RmYtP94gt13YLz3OT37zxf5F1NhbO90t9ylMTO5KqPDsH5wmhZCbLQ4k9/AXzQy8rKD0/5wrNS8qEqd/jWBXjoe4aEPYsx4p8rIP0sR1zFlHgGacPdPhOdO4F7kSKe9qacpPbMMuY8L1Gqrwz4qkAArbC9b7N0FMxuhZPoLS1k8MVfDtIlYMYARoHeZYWQ2+JkZDTIk7Z+NqXHFCoVfMT0K3Hso/McY36Pr60H6uTV+jTZZg/rgM6xSjoNjv15QtoGCGOeT7XkErxX8mEYLCmuAHRb5iVvQbXv8wgxy9V2hiRlO4NdlkjHnAmoMOhAcbWKp+yMCoUQjLXBgwcpw/deB1hy/8TVy7GVYbW7RYNxml/+pqP7Ng06ZcvnoZ73qX1CPN5adnGd3igp+hrX6S7tVa7ir3GqBMFLVl1tF+S1UbnBCj0g=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="./survey_files/notice_dialog.js.הורדה"></script>
+    </body></html>
