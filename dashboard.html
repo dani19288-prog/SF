@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.genspark.ai/api/files/s/dqc1qHbQ -->
+<html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דשבורד ניתוח תוצאות - שפונדר פדלון</title>
+    <link href="./dashboard_files/tailwind.min.css" rel="stylesheet">
+    <script src="./dashboard_files/chart.js.הורדה"></script>
+    <link rel="stylesheet" href="./dashboard_files/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap');
+        
+        * {
+            font-family: 'Heebo', sans-serif;
+        }
+        
+        body {
+            background: #F5F5F5;
+            direction: rtl;
+        }
+        
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 12px 0;
+        }
+        
+        .kpi-label {
+            font-size: 0.9rem;
+            color: #6B6B6B;
+            margin-top: 8px;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1B4B7F;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #C4A668;
+        }
+        
+        .status-excellent { background-color: #388E3C; color: white; }
+        .status-good { background-color: #8BC34A; color: white; }
+        .status-warning { background-color: #F57C00; color: white; }
+        .status-critical { background-color: #D32F2F; color: white; }
+        
+        .score-excellent { color: #388E3C; font-weight: 600; }
+        .score-good { color: #8BC34A; font-weight: 600; }
+        .score-warning { color: #F57C00; font-weight: 600; }
+        .score-critical { color: #D32F2F; font-weight: 600; }
+        
+        .btn-primary {
+            background: #C4A668;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: #B39558;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(196,166,104,0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #1B4B7F;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 2px solid #1B4B7F;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: #1B4B7F;
+            color: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th {
+            background: #1B4B7F;
+            color: white;
+            padding: 14px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        th:hover {
+            background: #143A63;
+        }
+        
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        
+        tr:hover {
+            background: #F9F9F9;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .donut-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-container img {
+            height: 150px;
+            object-fit: contain;
+        }
+        
+        .insight-box {
+            background: #FFF8E1;
+            border-right: 4px solid #C4A668;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+            line-height: 1.8;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #C4A668;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #C4A668;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .timestamp {
+            color: #6B6B6B;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+         {
+            .no-print { display: none !important; }
+            body { background: white; }
+        }
+        
+        @media (max-width: 768px) {
+            .kpi-value { font-size: 2rem; }
+            .chart-container { height: 300px; }
+            .logo-container img { height: 100px; }
+        }
+    </style>
+<style>
+    .genspark-notice-dialog {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 10001;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .genspark-notice-content {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      box-sizing: border-box;
+      padding: 10px 30px 30px 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+
+    .genspark-notice-title {
+      color: #000;
+      font-family: Arial;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 150%; 
+    }
+
+    .genspark-notice-list {
+      margin: 24px 0;
+      
+      color: #606366;
+      font-family: Arial;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+      padding-left: 12px;
+    }
+
+    .genspark-notice-list li {
+      margin-bottom: 12px;
+      list-style-type: disc;
+    }
+
+    .genspark-notice-list li a {
+      color: #606366;
+      text-decoration: underline;
+    }
+
+    .genspark-notice-checkbox {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      gap: 10px;
+
+      color: #232425;
+
+      font-family: Arial;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .genspark-notice-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+      
+    .genspark-notice-ok {
+      color: #232425;
+
+      text-align: center;
+      font-family: Arial;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 150%; 
+
+      cursor: pointer;
+      display: flex;
+      height: 40px;
+      padding: 6px 14px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      border-radius: 8px;
+      border: 1px solid #000;
+      box-sizing: border-box;
+      width: 100%;
+    }
+  </style></head>
+<body class="p-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="section-card text-center">
+            <div class="logo-container">
+                <!-- Logo 1: SF Gold - Replace with Base64 from https://www.genspark.ai/api/files/s/SX2fgQYb -->
+                <img src="./dashboard_files/SX2fgQYb" alt="לוגו SF זהב" style="height: 150px;">
+                <!-- Logo 2: Padlon Blue - Replace with Base64 from https://www.genspark.ai/api/files/s/U3KKpnmp -->
+                <img src="./dashboard_files/U3KKpnmp" alt="לוגו פדלון כחול" style="height: 150px;">
+            </div>
+            <h1 style="font-size: 2rem; font-weight: 700; color: #1B4B7F; margin-bottom: 8px;">שפונדר פדלון</h1>
+            <h2 style="font-size: 1.5rem; color: #4A6FA5; margin-bottom: 8px;">דשבורד ניתוח תוצאות - סקר שביעות רצון</h2>
+            <p style="color: #6B6B6B; margin-bottom: 16px;">עדכון אוטומטי בזמן אמת</p>
+            <div class="flex justify-center items-center gap-4 flex-wrap">
+                <div class="timestamp" id="lastUpdate">
+                    <i class="far fa-clock"></i>
+                    <span>עדכון אחרון: טוען...</span>
+                </div>
+                <button class="btn-primary no-print" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> רענן נתונים
+                </button>
+                <button class="btn-secondary no-print" onclick="loadSampleData()">
+                    <i class="fas fa-database"></i> טען נתוני דוגמה
+                </button>
+                <button class="btn-secondary no-print" onclick="exportToPDF()">
+                    <i class="fas fa-file-pdf"></i> ייצא ל-PDF
+                </button>
+                <button class="btn-secondary no-print" onclick="clearAllData()">
+                    <i class="fas fa-trash"></i> נקה נתונים
+                </button>
+            </div>
+        </header>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="section-card empty-state" style="display: block;">
+            <i class="fas fa-chart-line"></i>
+            <h3 style="font-size: 1.5rem; color: #1B4B7F; margin: 20px 0;">עדיין אין תשובות</h3>
+            <p style="color: #6B6B6B; margin-bottom: 24px;">שתף את קישור הסקר עם העובדים כדי להתחיל לאסוף נתונים</p>
+            <button class="btn-primary" onclick="loadSampleData()">טען נתוני דוגמה לצפייה</button>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboardContent" style="display: none;">
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <div class="kpi-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 2rem;">⭐</span>
+                        <span id="overallBadge" class="status-excellent" style="padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">מעולה</span>
+                    </div>
+                    <div class="kpi-value" id="overallAverage">0.0</div>
+                    <div class="kpi-label">ממוצע כללי של כל המחלקות</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div style="font-size: 2rem; margin-bottom: 8px;">👥</div>
+                    <div class="kpi-value" id="totalResponses">0</div>
+                    <div class="kpi-label">מספר משתתפים בסקר</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+                    <div class="kpi-value" id="lowestDept" style="font-size: 1.5rem;">-</div>
+                    <div class="kpi-label">מחלקה הדורשת שיפור מיידי</div>
+                    <div style="margin-top: 8px; font-weight: 600;" id="lowestScore">-</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div style="font-size: 2rem; margin-bottom: 8px;">✅</div>
+                    <div class="kpi-value" id="highestDept" style="font-size: 1.5rem;">-</div>
+                    <div class="kpi-label">המחלקה המובילה</div>
+                    <div style="margin-top: 8px; font-weight: 600;" id="highestScore">-</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div style="font-size: 2rem; margin-bottom: 8px;">🔴</div>
+                    <div class="kpi-value" id="topProblem" style="font-size: 1.2rem;">-</div>
+                    <div class="kpi-label">הבעיה הנפוצה ביותר</div>
+                    <div style="margin-top: 8px; font-weight: 600;" id="topProblemCount">-</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div style="font-size: 2rem; margin-bottom: 8px;">📈</div>
+                    <div class="kpi-value" id="trendIndicator">-</div>
+                    <div class="kpi-label">מגמת השתתפות</div>
+                </div>
+            </div>
+
+            <!-- Department Ratings Overview -->
+            <div class="section-card">
+                <h3 class="section-title">ציונים ממוצעים לפי מחלקה</h3>
+                <div class="chart-container">
+                    <canvas id="deptChart"></canvas>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table id="deptTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">מחלקה</th>
+                                <th onclick="sortTable(1)">מהירות מענה</th>
+                                <th onclick="sortTable(2)">איכות שירות</th>
+                                <th onclick="sortTable(3)">מקצועיות</th>
+                                <th onclick="sortTable(4)">נגישות</th>
+                                <th onclick="sortTable(5)">תקשורת</th>
+                                <th onclick="sortTable(6)">ממוצע כללי</th>
+                                <th>סטטוס</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deptTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Criteria Comparison -->
+            <div class="section-card">
+                <h3 class="section-title">השוואת ביצועים לפי קריטריון</h3>
+                <div class="chart-container">
+                    <canvas id="criteriaChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Radar Chart -->
+            <div class="section-card">
+                <h3 class="section-title">פרופיל ביצועים - השוואה רב-ממדית</h3>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Problem Analysis -->
+            <div class="section-card">
+                <h3 class="section-title">10 הבעיות הנפוצות ביותר בארגון</h3>
+                <div class="chart-container">
+                    <canvas id="problemChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Department Problems Donuts -->
+            <div class="section-card">
+                <h3 class="section-title">ניתוח בעיות לפי מחלקה</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 style="text-align: center; font-weight: 600; margin-bottom: 12px; color: #1B4B7F;">משאבי אנוש</h4>
+                        <div class="donut-container"><canvas id="hrDonut"></canvas></div>
+                    </div>
+                    <div>
+                        <h4 style="text-align: center; font-weight: 600; margin-bottom: 12px; color: #1B4B7F;">רכש</h4>
+                        <div class="donut-container"><canvas id="procurementDonut"></canvas></div>
+                    </div>
+                    <div>
+                        <h4 style="text-align: center; font-weight: 600; margin-bottom: 12px; color: #1B4B7F;">לוגיסטיקה</h4>
+                        <div class="donut-container"><canvas id="logisticsDonut"></canvas></div>
+                    </div>
+                    <div>
+                        <h4 style="text-align: center; font-weight: 600; margin-bottom: 12px; color: #1B4B7F;">IT</h4>
+                        <div class="donut-container"><canvas id="itDonut"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights & Recommendations -->
+            <div class="section-card">
+                <h3 class="section-title">ממצאים והמלצות</h3>
+                <div id="insights" class="insight-box"></div>
+            </div>
+
+            <!-- Detailed Responses Table -->
+            <div class="section-card">
+                <h3 class="section-title">תשובות מפורטות</h3>
+                <div class="flex justify-between items-center mb-4 no-print">
+                    <input type="text" id="searchBox" placeholder="חיפוש..." style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; width: 300px;">
+                    <button class="btn-secondary" onclick="exportToCSV()">
+                        <i class="fas fa-file-csv"></i> ייצא ל-CSV
+                    </button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table id="responsesTable">
+                        <thead>
+                            <tr>
+                                <th>מזהה</th>
+                                <th>תאריך ושעה</th>
+                                <th>משאבי אנוש</th>
+                                <th>רכש</th>
+                                <th>לוגיסטיקה</th>
+                                <th>IT</th>
+                                <th>ממוצע כללי</th>
+                                <th>בעיה עיקרית</th>
+                            </tr>
+                        </thead>
+                        <tbody id="responsesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const deptNames = {
+            hr: 'משאבי אנוש',
+            procurement: 'רכש',
+            logistics: 'לוגיסטיקה',
+            it: 'IT ומערכות מידע'
+        };
+
+        const criteriaNames = {
+            speed: 'מהירות מענה',
+            quality: 'איכות שירות',
+            professionalism: 'מקצועיות',
+            accessibility: 'נגישות',
+            communication: 'תקשורת'
+        };
+
+        let charts = {};
+
+        function average(arr) {
+            const filtered = arr.filter(x => x !== undefined && x !== null && !isNaN(x));
+            return filtered.length > 0 ? filtered.reduce((a, b) => a + b, 0) / filtered.length : 0;
+        }
+
+        function getScoreClass(score) {
+            if (score >= 4.0) return 'score-excellent';
+            if (score >= 3.0) return 'score-warning';
+            return 'score-critical';
+        }
+
+        function getStatusIcon(score) {
+            if (score >= 4.5) return '😊';
+            if (score >= 3.5) return '🙂';
+            if (score >= 2.5) return '😐';
+            if (score >= 1.5) return '☹️';
+            return '😞';
+        }
+
+        function loadSurveyData() {
+            const responses = JSON.parse(localStorage.getItem('surveyResponses') || '[]');
+            
+            if (responses.length === 0) {
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('dashboardContent').style.display = 'none';
+                return null;
+            }
+
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+
+            const departmentScores = calculateDepartmentScores(responses);
+            const problemFrequencies = calculateProblemFrequencies(responses);
+            const overallAverage = calculateOverallAverage(responses);
+
+            return {
+                responses,
+                totalResponses: responses.length,
+                lastUpdated: new Date(Math.max(...responses.map(r => new Date(r.timestamp)))),
+                departmentScores,
+                problemFrequencies,
+                overallAverage
+            };
+        }
+
+        function calculateDepartmentScores(responses) {
+            const departments = ['hr', 'procurement', 'logistics', 'it'];
+            const scores = {};
+
+            departments.forEach(dept => {
+                const criteria = ['speed', 'quality', 'professionalism', 'accessibility', 'communication'];
+                scores[dept] = {};
+                
+                criteria.forEach(crit => {
+                    scores[dept][crit] = average(responses.map(r => r.ratings?.[dept]?.[crit]).filter(x => x));
+                });
+                
+                scores[dept].average = average(Object.values(scores[dept]));
+            });
+
+            return scores;
+        }
+
+        function calculateProblemFrequencies(responses) {
+            const allProblems = {};
+
+            responses.forEach(response => {
+                if (response.problems) {
+                    Object.values(response.problems).forEach(deptProblems => {
+                        if (Array.isArray(deptProblems)) {
+                            deptProblems.forEach(problem => {
+                                if (problem && problem.trim()) {
+                                    allProblems[problem] = (allProblems[problem] || 0) + 1;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            return Object.entries(allProblems)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+        }
+
+        function calculateOverallAverage(responses) {
+            const allAverages = responses.map(r => {
+                const depts = ['hr', 'procurement', 'logistics', 'it'];
+                return average(depts.map(d => r.ratings?.[d]?.average).filter(x => x));
+            });
+            return average(allAverages);
+        }
+
+        function updateKPIs(data) {
+            // Overall Average
+            const overallAvg = data.overallAverage.toFixed(1);
+            document.getElementById('overallAverage').textContent = overallAvg;
+            
+            const badge = document.getElementById('overallBadge');
+            if (overallAvg >= 4.0) {
+                badge.className = 'status-excellent';
+                badge.textContent = 'מעולה';
+            } else if (overallAvg >= 3.0) {
+                badge.className = 'status-warning';
+                badge.textContent = 'דורש שיפור';
+            } else {
+                badge.className = 'status-critical';
+                badge.textContent = 'קריטי';
+            }
+
+            // Total Responses
+            document.getElementById('totalResponses').textContent = data.totalResponses;
+
+            // Lowest Department
+            const deptScores = Object.entries(data.departmentScores).map(([dept, scores]) => ({
+                dept,
+                score: scores.average
+            }));
+            deptScores.sort((a, b) => a.score - b.score);
+            
+            if (deptScores.length > 0) {
+                const lowest = deptScores[0];
+                document.getElementById('lowestDept').textContent = deptNames[lowest.dept];
+                document.getElementById('lowestScore').innerHTML = `<span class="score-critical">${lowest.score.toFixed(1)}/5.0</span>`;
+
+                const highest = deptScores[deptScores.length - 1];
+                document.getElementById('highestDept').textContent = deptNames[highest.dept];
+                document.getElementById('highestScore').innerHTML = `<span class="score-excellent">${highest.score.toFixed(1)}/5.0</span>`;
+            }
+
+            // Top Problem
+            if (data.problemFrequencies.length > 0) {
+                const [problem, count] = data.problemFrequencies[0];
+                document.getElementById('topProblem').textContent = problem;
+                document.getElementById('topProblemCount').textContent = `${count} פעמים`;
+            }
+
+            // Trend
+            document.getElementById('trendIndicator').textContent = data.totalResponses >= 10 ? '📈 טוב' : '📊 בהתחלה';
+
+            // Last Update
+            document.getElementById('lastUpdate').innerHTML = `
+                <i class="far fa-clock"></i>
+                <span>עדכון אחרון: ${data.lastUpdated.toLocaleString('he-IL')}</span>
+            `;
+        }
+
+        function updateDepartmentChart(data) {
+            const ctx = document.getElementById('deptChart');
+            if (charts.dept) charts.dept.destroy();
+
+            const depts = ['hr', 'procurement', 'logistics', 'it'];
+            const scores = depts.map(d => data.departmentScores[d].average);
+            const colors = scores.map(s => {
+                if (s >= 4.0) return '#388E3C';
+                if (s >= 3.0) return '#F57C00';
+                return '#D32F2F';
+            });
+
+            charts.dept = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: depts.map(d => deptNames[d]),
+                    datasets: [{
+                        label: 'ממוצע',
+                        data: scores,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.parsed.y.toFixed(2)}/5.0`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDepartmentTable(data) {
+            const tbody = document.getElementById('deptTableBody');
+            tbody.innerHTML = '';
+
+            Object.entries(data.departmentScores).forEach(([dept, scores]) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${deptNames[dept]}</td>
+                    <td class="${getScoreClass(scores.speed)}">${scores.speed.toFixed(1)}</td>
+                    <td class="${getScoreClass(scores.quality)}">${scores.quality.toFixed(1)}</td>
+                    <td class="${getScoreClass(scores.professionalism)}">${scores.professionalism.toFixed(1)}</td>
+                    <td class="${getScoreClass(scores.accessibility)}">${scores.accessibility.toFixed(1)}</td>
+                    <td class="${getScoreClass(scores.communication)}">${scores.communication.toFixed(1)}</td>
+                    <td style="font-weight: 700;" class="${getScoreClass(scores.average)}">${scores.average.toFixed(1)}</td>
+                    <td>${getStatusIcon(scores.average)}</td>
+                `;
+            });
+        }
+
+        function updateCriteriaChart(data) {
+            const ctx = document.getElementById('criteriaChart');
+            if (charts.criteria) charts.criteria.destroy();
+
+            const depts = ['hr', 'procurement', 'logistics', 'it'];
+            const criteria = ['speed', 'quality', 'professionalism', 'accessibility', 'communication'];
+            
+            const datasets = depts.map((dept, i) => ({
+                label: deptNames[dept],
+                data: criteria.map(c => data.departmentScores[dept][c]),
+                backgroundColor: ['#C4A668', '#1B4B7F', '#4A6FA5', '#6B6B6B'][i],
+                borderColor: ['#C4A668', '#1B4B7F', '#4A6FA5', '#6B6B6B'][i],
+                borderWidth: 2
+            }));
+
+            charts.criteria = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: criteria.map(c => criteriaNames[c]),
+                    datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateRadarChart(data) {
+            const ctx = document.getElementById('radarChart');
+            if (charts.radar) charts.radar.destroy();
+
+            const depts = ['hr', 'procurement', 'logistics', 'it'];
+            const criteria = ['speed', 'quality', 'professionalism', 'accessibility', 'communication'];
+            
+            const datasets = depts.map((dept, i) => ({
+                label: deptNames[dept],
+                data: criteria.map(c => data.departmentScores[dept][c]),
+                backgroundColor: ['rgba(196,166,104,0.2)', 'rgba(27,75,127,0.2)', 'rgba(74,111,165,0.2)', 'rgba(107,107,107,0.2)'][i],
+                borderColor: ['#C4A668', '#1B4B7F', '#4A6FA5', '#6B6B6B'][i],
+                borderWidth: 2,
+                pointBackgroundColor: ['#C4A668', '#1B4B7F', '#4A6FA5', '#6B6B6B'][i]
+            }));
+
+            charts.radar = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: criteria.map(c => criteriaNames[c]),
+                    datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateProblemChart(data) {
+            const ctx = document.getElementById('problemChart');
+            if (charts.problem) charts.problem.destroy();
+
+            if (data.problemFrequencies.length === 0) {
+                ctx.parentElement.innerHTML = '<p style="text-align: center; color: #6B6B6B; padding: 40px;">אין בעיות מדווחות</p>';
+                return;
+            }
+
+            const labels = data.problemFrequencies.map(([problem]) => problem);
+            const counts = data.problemFrequencies.map(([, count]) => count);
+
+            charts.problem = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'מספר דיווחים',
+                        data: counts,
+                        backgroundColor: '#D32F2F',
+                        borderColor: '#D32F2F',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDepartmentDonuts(data) {
+            const depts = ['hr', 'procurement', 'logistics', 'it'];
+            
+            depts.forEach(dept => {
+                const ctx = document.getElementById(`${dept}Donut`);
+                if (charts[`${dept}Donut`]) charts[`${dept}Donut`].destroy();
+
+                const deptProblems = {};
+                data.responses.forEach(r => {
+                    if (r.problems?.[dept]) {
+                        r.problems[dept].forEach(p => {
+                            if (p && p.trim()) {
+                                deptProblems[p] = (deptProblems[p] || 0) + 1;
+                            }
+                        });
+                    }
+                });
+
+                const sorted = Object.entries(deptProblems).sort((a, b) => b[1] - a[1]).slice(0, 5);
+                
+                if (sorted.length === 0) {
+                    ctx.parentElement.innerHTML = '<p style="text-align: center; color: #6B6B6B; padding: 40px;">אין בעיות מדווחות</p>';
+                    return;
+                }
+
+                charts[`${dept}Donut`] = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: sorted.map(([problem]) => problem),
+                        datasets: [{
+                            data: sorted.map(([, count]) => count),
+                            backgroundColor: ['#D32F2F', '#F57C00', '#FFA726', '#FFB74D', '#FFCC80'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            });
+        }
+
+        function updateInsights(data) {
+            const insights = document.getElementById('insights');
+            
+            const deptScores = Object.entries(data.departmentScores).map(([dept, scores]) => ({
+                dept,
+                score: scores.average
+            }));
+            deptScores.sort((a, b) => a.score - b.score);
+
+            const criteriaAvgs = {};
+            ['speed', 'quality', 'professionalism', 'accessibility', 'communication'].forEach(c => {
+                criteriaAvgs[c] = average(Object.values(data.departmentScores).map(s => s[c]));
+            });
+            const lowestCriteria = Object.entries(criteriaAvgs).sort((a, b) => a[1] - b[1])[0];
+
+            const topProblemPercent = data.problemFrequencies.length > 0 
+                ? ((data.problemFrequencies[0][1] / data.totalResponses) * 100).toFixed(0)
+                : 0;
+
+            const scoreRange = deptScores.length > 0 
+                ? (deptScores[deptScores.length - 1].score - deptScores[0].score).toFixed(1)
+                : 0;
+
+            insights.innerHTML = `
+                <div style="font-size: 1.1rem; line-height: 2;">
+                    <div style="margin-bottom: 20px;">
+                        <strong style="color: #1B4B7F; font-size: 1.2rem;">🔍 ממצאים עיקריים:</strong><br>
+                        ${deptScores.length > 0 ? `
+                        1. <strong>${deptNames[deptScores[0].dept]}</strong> קיבלה את הציון הנמוך ביותר (<span class="score-critical">${deptScores[0].score.toFixed(1)}</span>) - דורשת התייחסות מיידית<br>
+                        2. הקריטריון "<strong>${criteriaNames[lowestCriteria[0]]}</strong>" הוא החלש ביותר בכל הארגון (ממוצע <span class="score-warning">${lowestCriteria[1].toFixed(1)}</span>)<br>
+                        ${data.problemFrequencies.length > 0 ? `3. <strong>${topProblemPercent}%</strong> מהמשתתפים דיווחו על "${data.problemFrequencies[0][0]}"<br>` : ''}
+                        4. <strong>${deptNames[deptScores[deptScores.length - 1].dept]}</strong> מצטיינת בכל הקריטריונים (ממוצע <span class="score-excellent">${deptScores[deptScores.length - 1].score.toFixed(1)}</span>) - כדאי ללמוד ממנה
+                        ` : 'טוען נתונים...'}
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <strong style="color: #C4A668; font-size: 1.2rem;">💡 המלצות לפעולה:</strong><br>
+                        ${deptScores.length > 0 ? `
+                        • התמקד תחילה ב<strong>${deptNames[deptScores[0].dept]}</strong> - הציון הנמוך ביותר<br>
+                        ${data.problemFrequencies.length > 0 ? `• פתור את "${data.problemFrequencies[0][0]}" שמופיע ב-${topProblemPercent}% מהתגובות<br>` : ''}
+                        • העלה את הקריטריון "<strong>${criteriaNames[lowestCriteria[0]]}</strong>" על סדר היום הניהולי<br>
+                        • שתף best practices מ<strong>${deptNames[deptScores[deptScores.length - 1].dept]}</strong> עם שאר המחלקות
+                        ` : 'טוען המלצות...'}
+                    </div>
+                    
+                    <div>
+                        <strong style="color: #1B4B7F; font-size: 1.2rem;">📊 סטטיסטיקות נוספות:</strong><br>
+                        • טווח הציונים: ${deptScores.length > 0 ? `${deptScores[0].score.toFixed(1)} - ${deptScores[deptScores.length - 1].score.toFixed(1)} (פער של ${scoreRange} נקודות)` : 'N/A'}<br>
+                        • מספר משתתפים: <strong>${data.totalResponses}</strong><br>
+                        • בעיות מדווחות: <strong>${data.problemFrequencies.length}</strong> סוגים שונים
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateResponsesTable(data) {
+            const tbody = document.getElementById('responsesTableBody');
+            tbody.innerHTML = '';
+
+            data.responses.forEach((response, index) => {
+                const row = tbody.insertRow();
+                const timestamp = new Date(response.timestamp);
+                const topProblem = response.problems ? 
+                    Object.values(response.problems).flat().filter(x => x)[0] || '-' : '-';
+
+                row.innerHTML = `
+                    <td>#${index + 1}</td>
+                    <td>${timestamp.toLocaleString('he-IL')}</td>
+                    <td class="${getScoreClass(response.ratings?.hr?.average || 0)}">${(response.ratings?.hr?.average || 0).toFixed(1)}</td>
+                    <td class="${getScoreClass(response.ratings?.procurement?.average || 0)}">${(response.ratings?.procurement?.average || 0).toFixed(1)}</td>
+                    <td class="${getScoreClass(response.ratings?.logistics?.average || 0)}">${(response.ratings?.logistics?.average || 0).toFixed(1)}</td>
+                    <td class="${getScoreClass(response.ratings?.it?.average || 0)}">${(response.ratings?.it?.average || 0).toFixed(1)}</td>
+                    <td style="font-weight: 600;">${average([
+                        response.ratings?.hr?.average,
+                        response.ratings?.procurement?.average,
+                        response.ratings?.logistics?.average,
+                        response.ratings?.it?.average
+                    ].filter(x => x)).toFixed(1)}</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${topProblem}</td>
+                `;
+            });
+        }
+
+        function refreshData() {
+            const data = loadSurveyData();
+            if (data) {
+                updateKPIs(data);
+                updateDepartmentChart(data);
+                updateDepartmentTable(data);
+                updateCriteriaChart(data);
+                updateRadarChart(data);
+                updateProblemChart(data);
+                updateDepartmentDonuts(data);
+                updateInsights(data);
+                updateResponsesTable(data);
+            }
+        }
+
+        function loadSampleData() {
+            const sampleResponses = [];
+            const hrProblems = ['זמני תגובה ארוכים', 'בירוקרטיה מיותרת', 'חוסר תמיכה ניהולית'];
+            const procurementProblems = ['זמני הזמנה ארוכים', 'מחירים לא תחרותיים', 'חוסר גמישות'];
+            const logisticsProblems = ['איחורים באספקה', 'חוסר תיאום', 'מלאי לא מעודכן'];
+            const itProblems = ['מערכות לא יציבות', 'ציוד ישן', 'זמני תגובה ארוכים'];
+
+            for (let i = 0; i < 15; i++) {
+                const response = {
+                    id: Date.now() + i,
+                    timestamp: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+                    ratings: {
+                        hr: {
+                            speed: Math.floor(Math.random() * 3) + 2,
+                            quality: Math.floor(Math.random() * 3) + 2,
+                            professionalism: Math.floor(Math.random() * 3) + 3,
+                            accessibility: Math.floor(Math.random() * 3) + 2,
+                            communication: Math.floor(Math.random() * 3) + 2
+                        },
+                        procurement: {
+                            speed: Math.floor(Math.random() * 2) + 3,
+                            quality: Math.floor(Math.random() * 2) + 3,
+                            professionalism: Math.floor(Math.random() * 2) + 3,
+                            accessibility: Math.floor(Math.random() * 2) + 3,
+                            communication: Math.floor(Math.random() * 2) + 4
+                        },
+                        logistics: {
+                            speed: Math.floor(Math.random() * 3) + 2,
+                            quality: Math.floor(Math.random() * 3) + 3,
+                            professionalism: Math.floor(Math.random() * 2) + 3,
+                            accessibility: Math.floor(Math.random() * 2) + 3,
+                            communication: Math.floor(Math.random() * 2) + 3
+                        },
+                        it: {
+                            speed: Math.floor(Math.random() * 2) + 2,
+                            quality: Math.floor(Math.random() * 2) + 3,
+                            professionalism: Math.floor(Math.random() * 2) + 3,
+                            accessibility: Math.floor(Math.random() * 2) + 2,
+                            communication: Math.floor(Math.random() * 2) + 3
+                        }
+                    },
+                    problems: {
+                        hr: [hrProblems[Math.floor(Math.random() * hrProblems.length)]],
+                        procurement: Math.random() > 0.5 ? [procurementProblems[Math.floor(Math.random() * procurementProblems.length)]] : [],
+                        logistics: [logisticsProblems[Math.floor(Math.random() * logisticsProblems.length)]],
+                        it: Math.random() > 0.3 ? [itProblems[Math.floor(Math.random() * itProblems.length)]] : []
+                    },
+                    overallSatisfaction: Math.floor(Math.random() * 2) + 3,
+                    improvementSuggestions: 'שיפור כללי בשירות'
+                };
+
+                // Calculate averages
+                Object.keys(response.ratings).forEach(dept => {
+                    const scores = Object.values(response.ratings[dept]);
+                    response.ratings[dept].average = average(scores);
+                });
+
+                sampleResponses.push(response);
+            }
+
+            localStorage.setItem('surveyResponses', JSON.stringify(sampleResponses));
+            alert('נתוני דוגמה נטענו בהצלחה! (15 תשובות)');
+            refreshData();
+        }
+
+        function clearAllData() {
+            if (confirm('האם אתה בטוח שברצונך למחוק את כל התשובות? פעולה זו אינה הפיכה.')) {
+                localStorage.removeItem('surveyResponses');
+                location.reload();
+            }
+        }
+
+        function exportToCSV() {
+            const data = loadSurveyData();
+            if (!data) return;
+
+            let csv = 'מזהה,תאריך,משאבי אנוש,רכש,לוגיסטיקה,IT,ממוצע\n';
+            data.responses.forEach((r, i) => {
+                csv += `#${i+1},${new Date(r.timestamp).toLocaleString('he-IL')},`;
+                csv += `${(r.ratings?.hr?.average || 0).toFixed(1)},`;
+                csv += `${(r.ratings?.procurement?.average || 0).toFixed(1)},`;
+                csv += `${(r.ratings?.logistics?.average || 0).toFixed(1)},`;
+                csv += `${(r.ratings?.it?.average || 0).toFixed(1)},`;
+                const avg = average([r.ratings?.hr?.average, r.ratings?.procurement?.average, r.ratings?.logistics?.average, r.ratings?.it?.average].filter(x => x));
+                csv += `${avg.toFixed(1)}\n`;
+            });
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `survey_results_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        function exportToPDF() {
+            window.print();
+        }
+
+        function sortTable(colIndex) {
+            const table = document.getElementById('deptTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+            
+            rows.sort((a, b) => {
+                const aVal = parseFloat(a.cells[colIndex].textContent) || a.cells[colIndex].textContent;
+                const bVal = parseFloat(b.cells[colIndex].textContent) || b.cells[colIndex].textContent;
+                return typeof aVal === 'number' ? bVal - aVal : aVal.localeCompare(bVal);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchBox = document.getElementById('searchBox');
+            if (searchBox) {
+                searchBox.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const rows = document.querySelectorAll('#responsesTableBody tr');
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            }
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+
+        // Initial load
+        window.addEventListener('load', refreshData);
+    </script>
+<script defer="" src="./dashboard_files/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;rayId&quot;:&quot;9cf4a43fd8c42187&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfEdge&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}},&quot;version&quot;:&quot;2025.9.1&quot;,&quot;token&quot;:&quot;4edd5f8ec12a48cfa682ab8261b80a79&quot;}" crossorigin="anonymous"></script>
+
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDn3c0ZaMsJtWtthpGrNki4%2BoJVn1pXbaBnL1OSQd7X2VIyjuAhjghKVeVQf52quOkLUrD2ePrcWeCHq2w0ujYlETpPxKc6H4ZIYK1olzfixV1PxhuHu9zezk1c85UPRVpIbINENcJO3gIsZNz%2BaYJR%2FPxrknIVFoo1F3dyyQSb5T0Q56gE2ny%2F1tej1nzMtMsqUqiFdAf4pT95tavPxus6U7QwSEz9oC01oQBYIniDft2SFUH%2BxQQ7nXGX5meSxSIbJ%2B2DBxFUmZvEftFMtoitUN0EaVb3rmAeI7G5tQ9Y3MzB1rENbtPtI7Y%2FzNoFf0mMDBnnKjdLJA%2B2DTIhlH9kYVdAbDSwEMey5vCuWkO48NaGCqshuJNlCxmoJE2IN01v1uZfGSubTAQFKDw4uWcvZ7qX%2F0B1jTckG5v%2FQlWizc9fF%2FxgwZx314igUsoFozYGn%2BJQzb0WTEEjs2w65gaX%2FunW%2F6%2B6lNrJHMHB2FsgLh2hMgcWSgzewjmIuRJG1ijnDpgHsbRMqDgNHXqEQMgGrqkoZYd806HxqSa5aouWd8CgzvV2Dqu3dwIxsLdB2rAOo0WdZ4esc1CITJN0aDSKE%3D";
+        window.__genspark_locale = "he-IL";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDn3c0ZaMsJtWtthpGrNki4+oJVn1pXbaBnL1OSQd7X2VIyjuAhjghKVeVQf52quOkLUrD2ePrcWeCHq2w0ujYlETpPxKc6H4ZIYK1olzfixV1PxhuHu9zezk1c85UPRVpIbINENcJO3gIsZNz+aYJR/PxrknIVFoo1F3dyyQSb5T0Q56gE2ny/1tej1nzMtMsqUqiFdAf4pT95tavPxus6U7QwSEz9oC01oQBYIniDft2SFUH+xQQ7nXGX5meSxSIbJ+2DBxFUmZvEftFMtoitUN0EaVb3rmAeI7G5tQ9Y3MzB1rENbtPtI7Y/zNoFf0mMDBnnKjdLJA+2DTIhlH9kYVdAbDSwEMey5vCuWkO48NaGCqshuJNlCxmoJE2IN01v1uZfGSubTAQFKDw4uWcvZ7qX/0B1jTckG5v/QlWizc9fF/xgwZx314igUsoFozYGn+JQzb0WTEEjs2w65gaX/unW/6+6lNrJHMHB2FsgLh2hMgcWSgzewjmIuRJG1ijnDpgHsbRMqDgNHXqEQMgGrqkoZYd806HxqSa5aouWd8CgzvV2Dqu3dwIxsLdB2rAOo0WdZ4esc1CITJN0aDSKE=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="./dashboard_files/notice_dialog.js.הורדה"></script>
+    </body></html>
